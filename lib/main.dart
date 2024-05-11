@@ -3,7 +3,7 @@ import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:studycompanion/homePage.dart';
 
 void main() {
-  Gemini.init(apiKey: 'AIzaSyCuElfeK6q_-k8sFcfFPtSaVVb1unH8nkQ');
+  Gemini.init(apiKey: '--enter your key--');
 
   runApp(const MyApp());
 }
