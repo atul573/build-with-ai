@@ -1,26 +1,42 @@
-#!/bin/bash
+Sure, here is a PowerShell script to convert the delimiter of a CSV file. This script takes three parameters: the input file, the current delimiter, and the new delimiter.
 
-# Check if the correct number of arguments is provided
-if [ "$#" -ne 3 ]; then
-    echo "Usage: $0 input_file current_delimiter new_delimiter"
-    exit 1
-fi
-
-# Assign arguments to variables
-input_file=$1
-current_delimiter=$2
-new_delimiter=$3
+```powershell
+param (
+    [string]$inputFile,
+    [string]$currentDelimiter,
+    [string]$newDelimiter
+)
 
 # Check if the input file exists
-if [ ! -f "$input_file" ]; then
-    echo "File not found: $input_file"
+if (-Not (Test-Path -Path $inputFile)) {
+    Write-Host "File not found: $inputFile"
     exit 1
-fi
+}
 
 # Create output file name by appending _converted to the original file name
-output_file="${input_file%.csv}_converted.csv"
+$outputFile = [System.IO.Path]::ChangeExtension($inputFile, ".csv").Replace(".csv", "_converted.csv")
 
-# Use awk to replace the delimiter and save to the output file
-awk -v old_delim="$current_delimiter" -v new_delim="$new_delimiter" 'BEGIN {FS=old_delim; OFS=new_delim} { $1=$1; print }' "$input_file" > "$output_file"
+# Read the content of the input file
+$content = Get-Content -Path $inputFile
 
-echo "Conversion complete. Output saved to $output_file"
+# Replace the delimiter
+$convertedContent = $content -replace [regex]::Escape($currentDelimiter), $newDelimiter
+
+# Save the converted content to the output file
+$convertedContent | Out-File -FilePath $outputFile -Encoding utf8
+
+Write-Host "Conversion complete. Output saved to $outputFile"
+```
+
+### How to use the script:
+
+1. Save the script to a file, e.g., `Convert-Delimiter.ps1`.
+
+2. Open PowerShell and navigate to the directory where the script is located.
+
+3. Run the script with the appropriate arguments:
+   ```powershell
+   .\Convert-Delimiter.ps1 -inputFile "input.csv" -currentDelimiter "," -newDelimiter ";"
+   ```
+
+This command will convert the delimiter from a comma (`,`) to a semicolon (`;`) in the `input.csv` file and save the result to `input_converted.csv`.
