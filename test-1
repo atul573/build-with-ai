@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Check if the correct number of arguments is provided
+if [ "$#" -ne 3 ]; then
+    echo "Usage: $0 input_file current_delimiter new_delimiter"
+    exit 1
+fi
+
+# Assign arguments to variables
+input_file=$1
+current_delimiter=$2
+new_delimiter=$3
+
+# Check if the input file exists
+if [ ! -f "$input_file" ]; then
+    echo "File not found: $input_file"
+    exit 1
+fi
+
+# Create output file name by appending _converted to the original file name
+output_file="${input_file%.csv}_converted.csv"
+
+# Use awk to replace the delimiter and save to the output file
+awk -v old_delim="$current_delimiter" -v new_delim="$new_delimiter" 'BEGIN {FS=old_delim; OFS=new_delim} { $1=$1; print }' "$input_file" > "$output_file"
+
+echo "Conversion complete. Output saved to $output_file"
