@@ -37,3 +37,52 @@ Here's a step-by-step guide to building the Flutter project you provided, which 
   ```bash
   flutter run
   ```
+
+
+
+
+
+
+
+  Sure, here is a PowerShell script to convert the delimiter of a CSV file. This script takes three parameters: the input file, the current delimiter, and the new delimiter.
+
+```powershell
+param (
+    [string]$inputFile,
+    [string]$currentDelimiter,
+    [string]$newDelimiter
+)
+
+# Check if the input file exists
+if (-Not (Test-Path -Path $inputFile)) {
+    Write-Host "File not found: $inputFile"
+    exit 1
+}
+
+# Create output file name by appending _converted to the original file name
+$outputFile = [System.IO.Path]::ChangeExtension($inputFile, ".csv").Replace(".csv", "_converted.csv")
+
+# Read the content of the input file
+$content = Get-Content -Path $inputFile
+
+# Replace the delimiter
+$convertedContent = $content -replace [regex]::Escape($currentDelimiter), $newDelimiter
+
+# Save the converted content to the output file
+$convertedContent | Out-File -FilePath $outputFile -Encoding utf8
+
+Write-Host "Conversion complete. Output saved to $outputFile"
+```
+
+### How to use the script:
+
+1. Save the script to a file, e.g., `Convert-Delimiter.ps1`.
+
+2. Open PowerShell and navigate to the directory where the script is located.
+
+3. Run the script with the appropriate arguments:
+   ```powershell
+   .\Convert-Delimiter.ps1 -inputFile "input.csv" -currentDelimiter "," -newDelimiter ";"
+   ```
+
+This command will convert the delimiter from a comma (`,`) to a semicolon (`;`) in the `input.csv` file and save the result to `input_converted.csv`.
